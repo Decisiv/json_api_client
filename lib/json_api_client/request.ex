@@ -4,18 +4,21 @@ defmodule JsonApiClient.Request do
   """
   alias __MODULE__
   alias JsonApiClient.Resource
+
   @type http_methods :: :get | :post | :update | :delete | :put | :head | :options | :connect | :trace | :patch
+
   @type t :: %__MODULE__{
-    base_url: String.t() | nil,
-    params: map | nil,
-    id: binary | nil,
-    resource: Resource.t() | nil,
-    method: http_methods,
-    headers: map,
-    options: map,
-    service_name: atom | nil,
-    attributes: map
-  }
+          base_url: String.t() | nil,
+          params: map | nil,
+          id: binary | nil,
+          resource: Resource.t() | nil,
+          method: http_methods,
+          headers: map,
+          options: map,
+          service_name: atom | nil,
+          attributes: map
+        }
+
   defstruct(
     base_url: nil,
     params: %{},
@@ -51,7 +54,7 @@ defmodule JsonApiClient.Request do
   def method(%Request{} = req, method), do: %Request{req | method: method}
 
   @doc "Associate a resource with this request"
-  @spec resource(req :: Request.t(), resource :: Resource.t) :: Request.t()
+  @spec resource(req :: Request.t(), resource :: Resource.t()) :: Request.t()
   def resource(%Request{} = req, resource), do: %Request{req | resource: resource}
 
   @doc "Associate a service_name with this request"
@@ -88,7 +91,8 @@ defmodule JsonApiClient.Request do
       header(%Request{}, "X-My-Header", "My header value")
   """
   @spec header(req :: Request.t(), header_name :: name, header_value :: String.t()) :: Request.t()
-  def header(%Request{} = req, header_name, header_value), do: %Request{req | headers: Map.put(req.headers, header_name, header_value)}
+  def header(%Request{} = req, header_name, header_value),
+    do: %Request{req | headers: Map.put(req.headers, header_name, header_value)}
 
   defp encode_fields(%{fields: %{} = fields} = params) do
     encoded_fields =
@@ -241,7 +245,7 @@ defmodule JsonApiClient.Request do
   @doc """
   Retruns the HTTP body of the request
   """
-  @spec get_body(Request.t()) :: String.t
+  @spec get_body(Request.t()) :: String.t()
   def get_body(%Request{method: method, resource: resource})
       when method in [:post, :patch, :put] and not is_nil(resource) do
     Poison.encode!(%{data: resource})
