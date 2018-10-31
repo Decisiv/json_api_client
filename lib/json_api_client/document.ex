@@ -108,7 +108,7 @@ defmodule JsonApiClient.Resource do
     type: any,
     attributes: map | nil,
     links: JsonApiClient.Links.t() | nil,
-    relationships: %{optional(String.t()) => JsonApiClient.Relationship.t()} | %{},
+    relationships: %{optional(String.t() | atom()) => JsonApiClient.Relationship.t()} | %{},
     meta: map | nil
   }
   defstruct(
